@@ -56,7 +56,6 @@ typedef struct {
     UInt32 transaction_buffer_length;
     UInt8* transaction_buffer;
     UInt32 transaction_fifo_depth;
-    bool access_intr_mask_workaround;
 } VoodooI2CControllerBusDevice;
 
 class VoodooI2CController;
@@ -151,28 +150,13 @@ class EXPORT VoodooI2CControllerDriver : public IOService {
     IOLock* i2c_bus_lock = nullptr;
     bool is_interrupt_registered = false;
 
-    /* Request a 32-bit value property from this service or any parent in the
-     * IOService tree.
-     * @key Property name to lookup in IOService tree.
+    /* Requests the nub to fetch bus configuration values from the ACPI tables
      *
-     * @return Property value on success, 0 on failure.
-     */
-    UInt32 getNumProperty(const char *key);
-
-    /* Request a boolean property from this service or any parent in the
-     * IOService tree.
-     * @key Property name to lookup in IOService tree.
+     * This function evaluates the *SSCN* and *FMCN* methods in the ACPI tables via
+     * <VoodooI2CControllerNub::getACPIParams>.
      *
-     * @return Property value on success, false on failure.
-     */
-    bool getBoolProperty(const char *key);
-
-    /* Calculates bus timings using ACPI and Controller properties.
-     *
-     * Controller properties are polled for input clock rates, SDA hold times, and other values.
-     * The ACPI functions *SSCN* and *FMCN* methods (if present) are used to override the above defaults.
-     *
-     * @return *kIOReturnSuccess* on success, *kIOReturnNotFound if the *kI2CPropClkKey* property is missing.
+     * @return *kIOReturnSuccess* if all desired values were obtained, *kIOReturnNotFound( if (some or all)
+     * configuration values are missing
      */
 
     IOReturn getBusConfig();
@@ -268,6 +252,17 @@ class EXPORT VoodooI2CControllerDriver : public IOService {
      */
 
     IOReturn toggleBusState(VoodooI2CState enabled);
+
+    /* Toggle clock gating to save power
+     * @enabled The state the clock gate is expected to enter represented by either
+     *  *kVoodooI2CStateOn* or *kVoodooI2CStateOff*
+     *
+     * Clock gating is a method by which power consumption by a particular circuit is reduced. We need to disable the
+     * I2C controller's clock gate in order to be able to receive messages from the bus. We re-enable it when we aren't
+     * waiting for a message to save power.
+     */
+
+    inline void toggleClockGating(VoodooI2CState enabled);
 
     /* Toggle the interrupts' enabled state
      * @param enabled The state the interrupts are expected to enter represented by either

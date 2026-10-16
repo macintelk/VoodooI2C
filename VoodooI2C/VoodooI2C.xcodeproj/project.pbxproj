@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0F96EB84258D41900062E8FD /* libkmod.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7BE66D8F258AC5DC003CA4AD /* libkmod.a */; };
+		6FE8F89C25290B9600318126 /* VoodooI2CPCILakeController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6FE8F89A25290B9600318126 /* VoodooI2CPCILakeController.cpp */; };
+		6FE8F89D25290B9600318126 /* VoodooI2CPCILakeController.hpp in Headers */ = {isa = PBXBuildFile; fileRef = 6FE8F89B25290B9600318126 /* VoodooI2CPCILakeController.hpp */; };
 		AC015C471F32345500516383 /* VoodooI2CACPIController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC015C451F32345500516383 /* VoodooI2CACPIController.cpp */; };
 		AC015C481F32345500516383 /* VoodooI2CACPIController.hpp in Headers */ = {isa = PBXBuildFile; fileRef = AC015C461F32345500516383 /* VoodooI2CACPIController.hpp */; };
 		AC0955751F4ED4C50052E343 /* helpers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AC0955731F4ED4C50052E343 /* helpers.cpp */; };
@@ -51,6 +53,27 @@
 			proxyType = 1;
 			remoteGlobalIDString = 7B30D6861F910BAB00190488;
 			remoteInfo = VoodooI2CFTE;
+		};
+		2E268C2E3082551E00A54F88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E268C2A3082551E00A54F88 /* VoodooInput.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 7BBAB1F922E3A2F800B2941A;
+			remoteInfo = VoodooInput;
+		};
+		2E268C3B3082568300A54F88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 2E268C2A3082551E00A54F88 /* VoodooInput.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 7BBAB1F822E3A2F800B2941A;
+			remoteInfo = VoodooInput;
+		};
+		2E268C453082579500A54F88 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC09558A1F4EE10C0052E343 /* VoodooGPIO.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = F1F172C41F42263A00AD98FA;
+			remoteInfo = VoodooGPIO;
 		};
 		7B30D69B1F91141300190488 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -122,13 +145,6 @@
 			remoteGlobalIDString = ACD148A21FF17DE00008EA7B;
 			remoteInfo = VoodooI2CSynaptics;
 		};
-		ACBE3FED1FEDF49B0027F52E /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AC09558A1F4EE10C0052E343 /* VoodooGPIO.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = F1F172C41F42263A00AD98FA;
-			remoteInfo = VoodooGPIO;
-		};
 		ACF5BF2121717C6000E9104C /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = ACB62EF621717B3A00DF6D8B /* VoodooI2CSynaptics.xcodeproj */;
@@ -147,6 +163,9 @@
 
 /* Begin PBXFileReference section */
 		121132252129565400E4D720 /* VoodooI2CFTE.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VoodooI2CFTE.xcodeproj; path = "../../VoodooI2C Satellites/VoodooI2CFTE/VoodooI2CFTE.xcodeproj"; sourceTree = "<group>"; };
+		2E268C2A3082551E00A54F88 /* VoodooInput.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VoodooInput.xcodeproj; path = ../../Dependencies/VoodooInput/VoodooInput.xcodeproj; sourceTree = "<group>"; };
+		6FE8F89A25290B9600318126 /* VoodooI2CPCILakeController.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VoodooI2CPCILakeController.cpp; path = VoodooI2CController/VoodooI2CPCILakeController.cpp; sourceTree = "<group>"; };
+		6FE8F89B25290B9600318126 /* VoodooI2CPCILakeController.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = VoodooI2CPCILakeController.hpp; path = VoodooI2CController/VoodooI2CPCILakeController.hpp; sourceTree = "<group>"; };
 		7B30D6971F91141300190488 /* VoodooI2CELAN.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = VoodooI2CELAN.xcodeproj; path = "../../VoodooI2C Satellites/VoodooI2CELAN/VoodooI2CELAN.xcodeproj"; sourceTree = "<group>"; };
 		7BE66D8F258AC5DC003CA4AD /* libkmod.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libkmod.a; path = ../MacKernelSDK/Library/x86_64/libkmod.a; sourceTree = "<group>"; };
 		AC015C451F32345500516383 /* VoodooI2CACPIController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VoodooI2CACPIController.cpp; path = VoodooI2CController/VoodooI2CACPIController.cpp; sourceTree = "<group>"; };
@@ -219,6 +238,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		2E268C2B3082551E00A54F88 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				2E268C2F3082551E00A54F88 /* VoodooInput.kext */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		7B30D6981F91141300190488 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -258,6 +285,7 @@
 		AC0955711F4ED49E0052E343 /* Dependencies */ = {
 			isa = PBXGroup;
 			children = (
+				2E268C2A3082551E00A54F88 /* VoodooInput.xcodeproj */,
 				AC2DC7311F7F0E5B0071CDCA /* VoodooI2CServices.xcodeproj */,
 				AC09558A1F4EE10C0052E343 /* VoodooGPIO.xcodeproj */,
 				AC0955731F4ED4C50052E343 /* helpers.cpp */,
@@ -365,6 +393,8 @@
 				AC6268931F2F6CF1000CBF2D /* VoodooI2CController.hpp */,
 				AC49544F1F31E91D0040E11F /* VoodooI2CPCIController.cpp */,
 				AC4954501F31E91D0040E11F /* VoodooI2CPCIController.hpp */,
+				6FE8F89A25290B9600318126 /* VoodooI2CPCILakeController.cpp */,
+				6FE8F89B25290B9600318126 /* VoodooI2CPCILakeController.hpp */,
 				AC015C451F32345500516383 /* VoodooI2CACPIController.cpp */,
 				AC015C461F32345500516383 /* VoodooI2CACPIController.hpp */,
 				ACF810E61F3304720031A6F5 /* VoodooI2CControllerNub.cpp */,
@@ -444,6 +474,7 @@
 				AC0AD4591F3842800070A642 /* VoodooI2CDeviceNub.hpp in Headers */,
 				ACD86D922151BF5600C474A9 /* VoodooI2CNativeEngine.hpp in Headers */,
 				AC015C481F32345500516383 /* VoodooI2CACPIController.hpp in Headers */,
+				6FE8F89D25290B9600318126 /* VoodooI2CPCILakeController.hpp in Headers */,
 				AC09557A1F4ED4F60052E343 /* linuxirq.hpp in Headers */,
 				AC6268951F2F6CF1000CBF2D /* VoodooI2CController.hpp in Headers */,
 				ACF6CF121F7587E5001CAAEE /* VoodooI2CMultitouchEngine.hpp in Headers */,
@@ -463,17 +494,19 @@
 				AC2603AD1F2F294000CF238F /* Headers */,
 				AC2603AE1F2F294000CF238F /* Resources */,
 				AC0955921F4EE9B00052E343 /* Add GPIO and Services Plugin */,
-				EE5AF8832CD44DB1001EE729 /* Archive */,
+				ACA4A00D21E25F0E00A91B61 /* Linting */,
+				ACA4A00F21E25F3500A91B61 /* Generate Documentation */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				2E268C463082579500A54F88 /* PBXTargetDependency */,
+				2E268C3C3082568300A54F88 /* PBXTargetDependency */,
 				AC9B87DC21E263C7007C2EEE /* PBXTargetDependency */,
 				ACF5BF2221717C6000E9104C /* PBXTargetDependency */,
 				1211322C2129671C00E4D720 /* PBXTargetDependency */,
 				AC2DC7381F7F0E670071CDCA /* PBXTargetDependency */,
 				7B30D69E1F91166900190488 /* PBXTargetDependency */,
-				ACBE3FEE1FEDF49B0027F52E /* PBXTargetDependency */,
 				ACFB95CC1F54294F00867E18 /* PBXTargetDependency */,
 			);
 			name = VoodooI2C;
@@ -533,12 +566,16 @@
 					ProjectRef = AC2DC7311F7F0E5B0071CDCA /* VoodooI2CServices.xcodeproj */;
 				},
 				{
+					ProductGroup = AC94C8392119E50400D26081 /* Products */;
+					ProjectRef = AC94C8382119E50400D26081 /* VoodooI2CSynaptics.xcodeproj */;
+				},
+				{
 					ProductGroup = ACB62EF721717B3A00DF6D8B /* Products */;
 					ProjectRef = ACB62EF621717B3A00DF6D8B /* VoodooI2CSynaptics.xcodeproj */;
 				},
 				{
-					ProductGroup = AC94C8392119E50400D26081 /* Products */;
-					ProjectRef = AC94C8382119E50400D26081 /* VoodooI2CSynaptics.xcodeproj */;
+					ProductGroup = 2E268C2B3082551E00A54F88 /* Products */;
+					ProjectRef = 2E268C2A3082551E00A54F88 /* VoodooInput.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -554,6 +591,13 @@
 			fileType = wrapper.cfbundle;
 			path = VoodooI2CFTE.kext;
 			remoteRef = 121132292129565400E4D720 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		2E268C2F3082551E00A54F88 /* VoodooInput.kext */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = VoodooInput.kext;
+			remoteRef = 2E268C2E3082551E00A54F88 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		7B30D69C1F91141300190488 /* VoodooI2CELAN.kext */ = {
@@ -630,10 +674,10 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "mkdir -p \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns/VoodooGPIO.kext\"\nmv \"${BUILT_PRODUCTS_DIR}/VoodooGPIO.kext\" \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\n\nrm -rf \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns/VoodooI2CServices.kext\"\nmv \"${BUILT_PRODUCTS_DIR}/VoodooI2CServices.kext\" \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\n\nrm -rf \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext\"\ncp -r \"${SRCROOT}/../Dependencies/VoodooInput/${CONFIGURATION}\"/VoodooInput.kext \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\n\nrm -rf \"${BUILT_PRODUCTS_DIR}/VoodooInput.kext.dSYM\"\ncp -r \"${SRCROOT}/../Dependencies/VoodooInput/${CONFIGURATION}\"/*.dSYM ${BUILT_PRODUCTS_DIR} 2>/dev/null || true\n";
+			shellScript = "mkdir -p \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\nrm -rf \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns/VoodooGPIO.kext\"\nmv \"${BUILT_PRODUCTS_DIR}/VoodooGPIO.kext\" \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\n\nrm -rf \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns/VoodooI2CServices.kext\"\nmv \"${BUILT_PRODUCTS_DIR}/VoodooI2CServices.kext\" \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\n\nrm -rf \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns/VoodooInput.kext\"\nmv \"${BUILT_PRODUCTS_DIR}/VoodooInput.kext\" \"${BUILT_PRODUCTS_DIR}/VoodooI2C.kext/Contents/PlugIns\"\n\n";
 			showEnvVarsInLog = 0;
 		};
-		EE5AF8832CD44DB1001EE729 /* Archive */ = {
+		ACA4A00D21E25F0E00A91B61 /* Linting */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -642,14 +686,32 @@
 			);
 			inputPaths = (
 			);
-			name = Archive;
+			name = Linting;
 			outputFileListPaths = (
 			);
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"${TARGET_BUILD_DIR}\"\n\n# Find kexts\ndist=()\nfor i in *.kext; do\n    dist+=($i)\ndone\n\n# Move debug symbols to dSYM folder\nif [ -d \"$DWARF_DSYM_FILE_NAME\" ]; then\n  rm -rf dSYM\n  mkdir dSYM\n  find . -name \"*.dSYM\" -exec mv \"{}\" dSYM/ \\;\n  dist+=(dSYM);\nfi\n\n#zip\narchive=\"VoodooI2C-${CURRENT_PROJECT_VERSION}-$(echo $CONFIGURATION | tr /a-z/ /A-Z/).zip\"\nrm -rf *.zip\nzip -qry -FS \"${archive}\" \"${dist[@]}\"\n";
+			shellScript = "cpplint --recursive --filter=-build/include_subdir,-build/header_guard,-whitespace/line_length,-runtime/int ./\n";
+		};
+		ACA4A00F21E25F3500A91B61 /* Generate Documentation */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Documentation";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "pwd; find ./VoodooI2C ../Dependencies ../Multitouch\\ Support ../VoodooI2C\\ Satellites -name \"*.hpp\" -print0 | xargs -0 cldoc generate -x c++ -arch x86_64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -nostdinc -std=gnu++11 -stdlib=libc++ -fmodules -gmodules -fmodules-cache-path=${MODULE_CACHE_DIR} -fmodules-prune-interval=86400 -fmodules-prune-after=345600 -fbuild-session-file=${MODULE_CACHE_DIR}/Session.modulevalidation -fmodules-validate-once-per-build-session -Wnon-modular-include-in-framework-module -Werror=non-modular-include-in-framework-module -fno-builtin -Wno-trigraphs -fno-exceptions -fno-rtti -msoft-float -O0 -fno-common -mkernel -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wunreachable-code -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-non-virtual-dtor -Wno-overloaded-virtual -Wno-exit-time-destructors -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wno-inconsistent-missing-override -Wunused-variable -Wunused-value -Wempty-body -Wconditional-uninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wno-newline-eof -Wno-c++11-extensions -DDEBUG=1 -DKERNEL -DKERNEL_PRIVATE -DDRIVER_PRIVATE -DAPPLE -DNeXT -fapple-kext -fasm-blocks -fstrict-aliasing -Wdeprecated-declarations -Winvalid-offsetof -mmacosx-version-min=10.10 -g -Wno-sign-conversion -Winfinite-recursion -Wno-move -I${PROJECT_DIR}/../MacKernelSDK/Headers -I${SDKROOT}/System/Library/Frameworks/Kernel.framework/PrivateHeaders -I${SDKROOT}/System/Library/Frameworks/Kernel.framework/Headers -I${DERIVED_SOURCES_DIR}/x86_64 -I${DERIVED_SOURCES_DIR} -I../Dependencies/VoodooInput/Debug/VoodooInput.kext/Contents/Resources -Wno-inconsistent-missing-override -Wno-unused-variable -- --output ../docs --report --merge \"../Documentation\" --basedir .\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -661,6 +723,7 @@
 				AC0E757A1F69ACEE002268D0 /* VoodooI2CDigitiserStylus.cpp in Sources */,
 				AC0E75761F69997B002268D0 /* VoodooI2CDigitiserTransducer.cpp in Sources */,
 				AC0AD4581F3842800070A642 /* VoodooI2CDeviceNub.cpp in Sources */,
+				6FE8F89C25290B9600318126 /* VoodooI2CPCILakeController.cpp in Sources */,
 				ACF810E81F3304720031A6F5 /* VoodooI2CControllerNub.cpp in Sources */,
 				AC6268941F2F6CF1000CBF2D /* VoodooI2CController.cpp in Sources */,
 				AC09557B1F4ED4F60052E343 /* VoodooI2CACPIResourcesParser.cpp in Sources */,
@@ -682,6 +745,16 @@
 			name = VoodooI2CFTE;
 			targetProxy = 1211322B2129671C00E4D720 /* PBXContainerItemProxy */;
 		};
+		2E268C3C3082568300A54F88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VoodooInput;
+			targetProxy = 2E268C3B3082568300A54F88 /* PBXContainerItemProxy */;
+		};
+		2E268C463082579500A54F88 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = VoodooGPIO;
+			targetProxy = 2E268C453082579500A54F88 /* PBXContainerItemProxy */;
+		};
 		7B30D69E1F91166900190488 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = VoodooI2CELAN;
@@ -696,11 +769,6 @@
 			isa = PBXTargetDependency;
 			name = VoodooI2CAtmelMXT;
 			targetProxy = AC9B87DB21E263C7007C2EEE /* PBXContainerItemProxy */;
-		};
-		ACBE3FEE1FEDF49B0027F52E /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = VoodooGPIO;
-			targetProxy = ACBE3FED1FEDF49B0027F52E /* PBXContainerItemProxy */;
 		};
 		ACF5BF2221717C6000E9104C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -746,7 +814,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -805,7 +873,7 @@
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
@@ -832,18 +900,18 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.9.1;
+				CURRENT_PROJECT_VERSION = 2.8;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Dependencies/VoodooInput/Debug/VoodooInput.kext/Contents/Resources";
 				INFOPLIST_FILE = VoodooI2C/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../MacKernelSDK/Library/x86_64",
 				);
-				MARKETING_VERSION = 2.9.1;
+				MARKETING_VERSION = 2.8;
 				MODULE_NAME = com.alexandred.VoodooI2C;
-				MODULE_VERSION = 2.9.1;
+				MODULE_VERSION = 2.8;
 				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "-Wno-inconsistent-missing-override";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexandred.VoodooI2C;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -857,18 +925,18 @@
 				ALWAYS_SEARCH_USER_PATHS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "-";
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2.9.1;
+				CURRENT_PROJECT_VERSION = 2.8;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/../Dependencies/VoodooInput/Debug/VoodooInput.kext/Contents/Resources";
 				INFOPLIST_FILE = VoodooI2C/Info.plist;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/../MacKernelSDK/Library/x86_64",
 				);
-				MARKETING_VERSION = 2.9.1;
+				MARKETING_VERSION = 2.8;
 				MODULE_NAME = com.alexandred.VoodooI2C;
-				MODULE_VERSION = 2.9.1;
+				MODULE_VERSION = 2.8;
 				ONLY_ACTIVE_ARCH = YES;
 				"OTHER_CPLUSPLUSFLAGS[arch=*]" = "-Wno-inconsistent-missing-override";
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexandred.VoodooI2C;

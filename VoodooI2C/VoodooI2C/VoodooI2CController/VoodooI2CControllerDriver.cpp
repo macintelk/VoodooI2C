@@ -29,8 +29,8 @@ constexpr uint64_t MICRO = 1000000;
   ({                                                                           \
     uint32_t __base = (base);                                                  \
     uint32_t __rem;                                                            \
-    __rem = (static_cast<uint64_t>(n)) % __base;                               \
-    (n) = (static_cast<uint64_t>(n)) / __base;                                 \
+    __rem = ((uint64_t)(n)) % __base;                                          \
+    (n) = ((uint64_t)(n)) / __base;                                            \
     __rem;                                                                     \
   })
 
@@ -65,50 +65,18 @@ static inline SInt64 div_s64(SInt64 dividend, SInt32 divisor) {
                              : div_s64((__x - (__d / 2)), __d);                \
   })
 
-/* Calculate hold time register
- * Formulas from /drivers/i2c/busses/i2c-designware-common.c
- * @tHigh Hold time in nanoseconds
- * @tFall Fall time in nanoseconds
- *
- * @return Hold time to write to I2C Controller
- */
-static UInt32 vi2c_scl_hcnt(UInt32 clk, UInt32 tHigh, UInt32 tFall) {
-    return (UInt32) DIV_ROUND_CLOSEST_ULL((UInt64)clk * (tHigh + tFall), MICRO) - 3;
-}
-
-/* Calculate hold time register
- * Formulas from /drivers/i2c/busses/i2c-designware-common.c
- * @tHigh Hold time in nanoseconds
- * @tFall Fall time in nanoseconds
- *
- * @return Hold time to write to I2C Controller
- */
-static UInt32 vi2c_scl_lcnt(UInt32 clk, UInt32 tLow, UInt32 tFall) {
-    return (UInt32) DIV_ROUND_CLOSEST_ULL((UInt64)clk * (tLow + tFall), MICRO) - 1;
-}
-
-UInt32 VoodooI2CControllerDriver::getNumProperty(const char *key) {
-    OSNumber *prop = OSDynamicCast(OSNumber, getProperty(key, gIOServicePlane));
-    if (!prop) {
-        IOLog("%s::%s Failed to get property %s\n", getName(), bus_device.name, key);
+static UInt32 getClkRateFor(const char *name) {
+    if (!strncmp(name, "AMD0010", sizeof("AMD0010"))) {
+        return 133000000 / KILO;
+    } else if (!strncmp(name, "AMDI0010", sizeof("AMDI0010")) || !strncmp(name, "AMDI0019", sizeof("AMDI0019"))) {
+        return 150000000 / KILO;
+    } else {
         return 0;
     }
-
-    return prop->unsigned32BitValue();
-}
-
-bool VoodooI2CControllerDriver::getBoolProperty(const char *key) {
-    OSBoolean *prop = OSDynamicCast(OSBoolean, getProperty(key, gIOServicePlane));
-    if (!prop) {
-        IOLog("%s::%s Failed to get property %s\n", getName(), bus_device.name, key);
-        return false;
-    }
-
-    return prop->getValue();
 }
 
 IOReturn VoodooI2CControllerDriver::getBusConfig() {
-    UInt32 sdaFallNs, sclFallNs;
+    bool error = false;
 
     auto param = readRegister(DW_IC_COMP_PARAM_1);
     auto tx_fifo_depth = ((param >> 16) & 0xff) + 1;
@@ -116,55 +84,44 @@ IOReturn VoodooI2CControllerDriver::getBusConfig() {
     bus_device.transaction_fifo_depth = tx_fifo_depth;
     bus_device.receive_fifo_depth = rx_fifo_depth;
 
-    memset(&bus_device.acpi_config, 0, sizeof(bus_device.acpi_config));
+    auto i2c_clk = getClkRateFor(nub->controller->physical_device.name);
 
-    UInt32 clkKHz = getNumProperty(kI2CPropClkKey) / 1000;
-    if (!clkKHz) {
-        IOLog("%s::%s Failed to find clock (I2CClkRate)!\n", getName(), bus_device.name);
-        return kIOReturnError;
+    bool is_sunrise_point = !strncmp(nub->controller->physical_device.name, "INT344B", sizeof("INT344B"))
+            || !strncmp(nub->controller->physical_device.name, "INT345D", sizeof("INT345D"));
+
+    if (nub->getACPIParams((const char*)"SSCN", &bus_device.acpi_config.ss_hcnt, &bus_device.acpi_config.ss_lcnt, NULL) != kIOReturnSuccess) {
+        if (i2c_clk) {
+            bus_device.acpi_config.ss_hcnt = (UInt32)DIV_ROUND_CLOSEST_ULL((UInt64)i2c_clk * (4000 + 300), MICRO) - 3;
+            bus_device.acpi_config.ss_lcnt = (UInt32)DIV_ROUND_CLOSEST_ULL((UInt64)i2c_clk * (4700 + 300), MICRO) - 1;
+        } else {
+            bus_device.acpi_config.ss_hcnt = is_sunrise_point ? 0x01B0 : 0x03F2;
+            bus_device.acpi_config.ss_lcnt = is_sunrise_point ? 0x01FB : 0x043D;
+            error = true;
+        }
     }
 
-    // Grab controller defaults
-    bus_device.acpi_config.sda_hold = getNumProperty(kI2CPropSdaHoldKey);
-    bus_device.acpi_config.ss_hcnt = getNumProperty(kI2CPropSsHCntKey);
-    bus_device.acpi_config.ss_lcnt = getNumProperty(kI2CPropSsLCntKey);
-    bus_device.acpi_config.fs_hcnt = getNumProperty(kI2CPropFsHCntKey);
-    bus_device.acpi_config.fs_lcnt = getNumProperty(kI2CPropFsLCntKey);
-    bus_device.access_intr_mask_workaround = getBoolProperty(kI2CPropMaskQuirkKey);
-
-    sdaFallNs = getNumProperty(kI2CPropSdaFallNsKey) ?: 300;  // 0.3us default
-    sclFallNs = getNumProperty(kI2CPropSclFallNsKey) ?: 300;  // 0.3us default
-
-    if (!bus_device.acpi_config.sda_hold) {
-        UInt32 sdaHoldNs = getNumProperty(kI2CPropSdaHoldNsKey);
-        bus_device.acpi_config.sda_hold = (UInt32) DIV_ROUND_CLOSEST_ULL((UInt64) clkKHz * sdaHoldNs, MICRO);
-    }
-
-    // Grab higher priority ACPI configuration
-    (void) nub->getACPIParams((const char*)"SSCN",
-                              &bus_device.acpi_config.ss_hcnt,
-                              &bus_device.acpi_config.ss_lcnt,
-                              NULL);
-
-    (void) nub->getACPIParams((const char*)"FMCN",
-                              &bus_device.acpi_config.fs_hcnt,
-                              &bus_device.acpi_config.fs_lcnt,
-                              &bus_device.acpi_config.sda_hold);
-
-    // Derive any values not filled in by defaults/acpi
-    if (!bus_device.acpi_config.ss_hcnt || !bus_device.acpi_config.ss_lcnt) {
-        bus_device.acpi_config.ss_hcnt = vi2c_scl_hcnt(clkKHz, 4000, sdaFallNs);  // tHigh = 4us
-        bus_device.acpi_config.ss_lcnt = vi2c_scl_lcnt(clkKHz, 4700, sclFallNs);  // tLow = 4.7us
-    }
-
-    if (!bus_device.acpi_config.fs_hcnt || !bus_device.acpi_config.fs_lcnt) {
-        bus_device.acpi_config.fs_hcnt = vi2c_scl_hcnt(clkKHz, 600, sdaFallNs);   // tHigh = 0.6us
-        bus_device.acpi_config.fs_lcnt = vi2c_scl_lcnt(clkKHz, 1300, sclFallNs);  // tLow = 1.3us
+    if (nub->getACPIParams((const char*)"FMCN", &bus_device.acpi_config.fs_hcnt, &bus_device.acpi_config.fs_lcnt, &bus_device.acpi_config.sda_hold) != kIOReturnSuccess) {
+        if (i2c_clk) {
+            bus_device.acpi_config.fs_hcnt = (UInt32)DIV_ROUND_CLOSEST_ULL((UInt64)i2c_clk * (600 + 300), MICRO) - 3;
+            bus_device.acpi_config.fs_lcnt = (UInt32)DIV_ROUND_CLOSEST_ULL((UInt64)i2c_clk * (1300 + 300), MICRO) - 1;
+        } else {
+            bus_device.acpi_config.fs_hcnt = is_sunrise_point ? 0x48 : 0x0101;
+            bus_device.acpi_config.fs_lcnt = is_sunrise_point ? 0xA0 : 0x012C;
+            error = true;
+        }
     }
 
     if (readRegister(DW_IC_COMP_VERSION) >= DW_IC_SDA_HOLD_MIN_VERS) {
+        if (i2c_clk) {
+            bus_device.acpi_config.sda_hold = (UInt32)DIV_S64_ROUND_CLOSEST((SInt64)i2c_clk * 300, MICRO);
+        }
+
         if (!bus_device.acpi_config.sda_hold) {
             bus_device.acpi_config.sda_hold = readRegister(DW_IC_SDA_HOLD);
+        }
+
+        if (!bus_device.acpi_config.sda_hold) {
+            bus_device.acpi_config.sda_hold = is_sunrise_point ? 0x1E : 0x62;
         }
 
         /*
@@ -181,7 +138,10 @@ IOReturn VoodooI2CControllerDriver::getBusConfig() {
         IOLog("%s::%s Warning: hardware too old to adjust SDA hold time\n", getName(), bus_device.name);
     }
 
-    return kIOReturnSuccess;
+    if (error)
+        return kIOReturnNotFound;
+    else
+        return kIOReturnSuccess;
 }
 
 IOReturn VoodooI2CControllerDriver::setBusConfigProperties() {
@@ -266,7 +226,7 @@ void VoodooI2CControllerDriver::handleInterrupt(OSObject* target, void* refCon, 
 wakeup:
     if (((status & (DW_IC_INTR_TX_ABRT | DW_IC_INTR_STOP_DET)) || bus_device.message_error) && (bus_device.receive_outstanding == 0)) {
         command_gate->commandWakeup(&bus_device.command_complete);
-    } else if (bus_device.access_intr_mask_workaround) {
+    } else if (nub->controller->physical_device.access_intr_mask_workaround) {
         /* Workaround to trigger pending interrupt */
         status = readRegister(DW_IC_INTR_MASK);
         writeRegister(0, DW_IC_INTR_MASK);
@@ -523,7 +483,7 @@ void VoodooI2CControllerDriver::requestTransferI2C() {
     VoodooI2CControllerBusMessage *messages = bus_device.messages;
     UInt32 i2c_configuration, i2c_target = 0, orig;
 
-    if (bus_device.access_intr_mask_workaround) {
+    if (nub->controller->physical_device.access_intr_mask_workaround) {
         // Linux code works with black magic, on macOS with AMD I2C turning off the adapter
         // and rewriting the bus settings is required
         initialiseBus();
@@ -619,10 +579,11 @@ bool VoodooI2CControllerDriver::start(IOService* provider) {
     nub->joinPMtree(this);
     registerPowerDriver(this, VoodooI2CIOPMPowerStates, kVoodooI2CIOPMNumberPowerStates);
 
-    if (getBusConfig() != kIOReturnSuccess)
-        goto exit;
-
-    IOLog("%s::%s Got bus configuration values\n", getName(), bus_device.name);
+    if (getBusConfig() != kIOReturnSuccess) {
+        IOLog("%s::%s Warning: Error getting bus config, using defaults where necessary\n", getName(), bus_device.name);
+    } else {
+        IOLog("%s::%s Got bus configuration values\n", getName(), bus_device.name);
+    }
 
     setBusConfigProperties();
 
@@ -693,6 +654,7 @@ IOReturn VoodooI2CControllerDriver::toggleBusState(VoodooI2CState enabled) {
         writeRegister(enabled, DW_IC_ENABLE);
 
         if ((readRegister(DW_IC_ENABLE_STATUS) & 1) == enabled) {
+            toggleClockGating(enabled);
             return kIOReturnSuccess;
         }
 
@@ -701,6 +663,13 @@ IOReturn VoodooI2CControllerDriver::toggleBusState(VoodooI2CState enabled) {
 
     IOLog("%s::%s Timed out waiting for bus to change state\n", getName(), bus_device.name);
     return kIOReturnTimeout;
+}
+
+inline void VoodooI2CControllerDriver::toggleClockGating(VoodooI2CState enabled) {
+    const char *name = nub->controller->physical_device.name;
+    if (name[0] == 'A' && name[1] == 'M' && name[2] == 'D') {
+        writeRegister(enabled, LPSS_PRIVATE_CLOCK_GATING);
+    }
 }
 
 void VoodooI2CControllerDriver::toggleInterrupts(VoodooI2CState enabled) {
